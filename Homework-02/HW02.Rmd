@@ -1,10 +1,7 @@
 ---
 title: 'Homework 2: Housing Price'
 author: "DingHuan, 3170102085"
-output:
-  pdf_document: default
-  html_document:
-    df_print: paged
+output: pdf_document
 ---
 1. _Loading and cleaning_
     a. 
@@ -99,21 +96,45 @@ output:
     median(ca_pa[ca_pa$STATEFP == 6 & ca_pa$COUNTYFP == 1, "Median_house_value"])
     ```
     c. 
-    ```{r}
+    ```{r, message = F}
     ca_pa_long <- ca_pa %>% 
       gather(key = built_year,
              value = built_numbers,
              dplyr::starts_with('Built'))
+    ca_pa_long %>% 
+      filter((STATEFP == 6 & COUNTYFP %in% c(1,85)) | (STATEFP == 42 & COUNTYFP == 3)) %>% 
+      group_by(COUNTYFP) %>% 
+      summarise(APHB_2005 = sum((built_year == "Built_2005_or_later") *
+                                  built_numbers)/sum(built_numbers)) %>% 
+      ungroup()
     ```
     d. 
-    ```{r}
-    
+    ```{r, message = F}
+    p <- ca_pa_long %>% group_by(X) %>% 
+      summarise(APHB_2005 = sum((built_year == "Built_2005_or_later") *
+                                  built_numbers)/sum(built_numbers)) %>% 
+      ungroup()
+    ca_pa <- dplyr::left_join(ca_pa, p, by = "X")
+    rm(p)
+    cor(ca_pa$Median_house_value, ca_pa$APHB_2005)
+    ca_pa %>% mutate(STATENAME = ifelse(STATEFP == 6, "California", "Pennsylvania")) %>% 
+      group_by(STATENAME) %>% 
+      summarise(Correlation_coefficient = cor(Median_house_value, APHB_2005))
+    ca_pa %>% 
+      filter((STATEFP == 6 & COUNTYFP %in% c(1,85)) | (STATEFP == 42 & COUNTYFP == 3)) %>% 
+      mutate(COUNTYNAME = ifelse(COUNTYFP == 1, "Alameda County",
+                                 ifelse(COUNTYFP == 85, "Santa Clara",
+                                        "Allegheny County"))) %>% 
+      group_by(COUNTYNAME) %>% 
+      summarise(Correlation_coefficient = cor(Median_house_value, APHB_2005))
     ```
     e. 
     ```{r}
-    ca_pa %>% filter(((COUNTYFP==1|COUNTYFP==85)&STATEFP == 6) | COUNTYFP==3&STATEFP == 42) %>% 
+    ca_pa %>% 
+      filter((COUNTYFP %in% c(1,85) &STATEFP == 6) | (COUNTYFP==3&STATEFP == 42)) %>% 
       mutate(COUNTYNAME = ifelse(COUNTYFP == 1, "Alameda County",
-                                 ifelse(COUNTYFP == 85, "Santa Clara", "Allegheny County"))) %>% 
+                                 ifelse(COUNTYFP == 85, "Santa Clara",
+                                        "Allegheny County"))) %>% 
       ggplot(aes(x = Median_household_income, y=Median_house_value, color = COUNTYNAME)) +
       geom_point(alpha = 0.4) +
       labs(x = "Median Household Income",
@@ -154,9 +175,13 @@ output:
     ```
     
 7. (MB.CH1.18)
-    a. 
     ```{r}
     library(MASS)
     data(Rabbit)
-    
+    Treatment <- unstack(Rabbit, Treatment ~ Animal)
+    Dose <- unstack(Rabbit, Dose ~ Animal)
+    BPchange <- unstack(Rabbit, BPchange ~ Animal)
+    Rabbit <- data.frame(Treatment = Treatment[,1],Dose = Dose[,1])
+    Rabbit <- cbind(Rabbit, BPchange)
+    Rabbit
     ```
