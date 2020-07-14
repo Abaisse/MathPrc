@@ -1,7 +1,10 @@
 ---
-title: "Homework 2: Housing Price"
+title: 'Homework 2: Housing Price'
 author: "DingHuan, 3170102085"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 1. _Loading and cleaning_
     a. 
@@ -119,25 +122,41 @@ output: pdf_document
       theme(legend.title=element_blank())
     ```
 
-MB.CH1.11 The first line create an variable `gender` with 2 levels "female" and "male", whose first 91 elements are "female" and the remaining elements are "male". The second line `table(gender)` shows the factor levels.
+5. (MB.CH1.11) The first line create an variable `gender` with 2 levels "female" and "male", whose first 91 elements are "female" and the remaining elements are "male". The second line `table(gender)` shows the factor levels. The third line exchanges the order of levels. The function searches `gender` first, finding the same level as elements in `levels=c("male", "female")`, and then changes the numeric order to the new levels. But when it doesn't find the same level, just as line 5, the function removes the old levels and create an new level named `Male` and matches nothing, thus the result of `table(gender)` is 0 for level "Male". When NA is included in table, like what line8 does, we can see an NA level with 92 elements, which are exactly those whose level "male" are removed in line5.
+    ```{r}
+    gender <- factor(c(rep("female", 91), rep("male", 92)))
+    table(gender)
+    gender <- factor(gender, levels=c("male", "female"))
+    table(gender)
+    gender <- factor(gender, levels=c("Male", "female"))
+    # Note the mistake: "Male" should be "male"
+    table(gender)
+    table(gender, exclude=NULL)
+    rm(gender)  # Remove gender
+    ```
 
-The third line exchanges the order of levels. The function searches `gender` first, finding the same level as elements in `levels=c("male", "female")`, and then changes the numeric order to the new levels.
-
-But when it doesn't find the same level, just as line 5, the function removes the old levels and create an new level named `Male` and matches nothing, thus the result of `table(gender)` is 0 for level "Male". When NA is included in table, like what line8 does, we can see an NA level with 92 elements, which are exactly those whose level "male" are removed in line5.
-```{r}
-gender <- factor(c(rep("female", 91), rep("male", 92)))
-table(gender)
-gender <- factor(gender, levels=c("male", "female"))
-table(gender)
-gender <- factor(gender, levels=c("Male", "female"))
-# Note the mistake: "Male" should be "male"
-table(gender)
-table(gender, exclude=NULL)
-rm(gender)  # Remove gender
-```
-
-MB.Ch1.12.
-```{r}
-
-```
+6. (MB.CH1.12)
+    a. 
+    ```{r}
+    cutoff <- function(x, value){
+    prop = sum(x > value) / length(x)
+    return(prop)
+    }
+    cutoff(1:100, 10)
+    cutoff(1:100, 35)
+    cutoff(1:100, 35.5)
+    ```
+    b.  
+    ```{r, message = F}
+    library(Devore7)
+    dotplot(ex01.36)
+    cutoff(ex01.36$C1, 420)
+    ```
     
+7. (MB.CH1.18)
+    a. 
+    ```{r}
+    library(MASS)
+    data(Rabbit)
+    
+    ```
