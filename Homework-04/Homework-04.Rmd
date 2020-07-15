@@ -1,6 +1,8 @@
 ---
-title: "Homework 4: Diffusion of Tetracycline"
-output: pdf_document
+title: 'Homework 4: Diffusion of Tetracycline'
+output:
+  html_document:
+    df_print: paged
 ---
 
 We continue examining the diffusion of tetracycline among doctors in Illinois in the early 1950s, building on our work in lab 6.  You will need the data sets `ckm_nodes.csv` and `ckm_network.dat` from the labs.

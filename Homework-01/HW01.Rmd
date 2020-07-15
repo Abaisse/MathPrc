@@ -3,8 +3,7 @@ title: "Homework-01"
 author: "DingHuan,3170102085"
 output: pdf_document
 ---
-1. **Solve**. 
-    a. Noticing that the data in iowa.csv is seperated by ";", I choose to add an argument `sep = ";"` to the funtion `read.csv()`.
+1. a. Noticing that the data in iowa.csv is seperated by ";", I choose to add an argument `sep = ";"` to the funtion `read.csv()`.
     ```{r}
     iowa.df <- read.csv("data/iowa.csv", header = T, sep = ";")
     head(iowa.df)
@@ -26,8 +25,7 @@ output: pdf_document
     iowa.df[2,]
     ``` 
 
-2. **Solve**. 
-    a. The first line creates a vector of characters(or strings) named `vactor1`.
+2. a. The first line creates a vector of characters(or strings) named `vactor1`.
     ```{r}
     vector1 <- c("5", "12", "7", "32")
     ```
@@ -60,8 +58,7 @@ output: pdf_document
     list4[2]+list4[4]
     ```
     
-3. **Solve**.
-    a. Use arguments `by` and `length.out` in `seq()` to achieve the target.
+3. a. Use arguments `by` and `length.out` in `seq()` to achieve the target.
     ```{r}
     seq(1, 10000, by = 372)
     seq(1, 10000, length.out = 50)
@@ -72,7 +69,7 @@ output: pdf_document
     rep(1:3, each = 3)
     ```
 
-4. (MB.CH1.2) **Solve**. 
+4. (MB.CH1.2) 
     ```{r, message = F}
     library(DAAG)
     library(tidyverse)
@@ -88,8 +85,7 @@ output: pdf_document
       labs(title = "The full data set")
     ```
     
-5. (MB.CH1.4) **Solve**. 
-    a. There's no column holds missing values.
+5. (MB.CH1.4) a. There's no column holds missing values.
     ```{r}
     data(ais)
     str(ais)
@@ -110,7 +106,7 @@ output: pdf_document
     balance = ST['male',] / ST['female',]
     names(which(balance < 0.5 | balance > 2))
     ```
-6. (MB.CH1.6) **Solve**.
+6. (MB.CH1.6) 
     ```{r}
     Manitoba.lakes <- data.frame(
       elevation = c(217,254,248,254,253,227,178,207,217),
@@ -133,7 +129,7 @@ output: pdf_document
     text(area ~ elevation, labels=area, pos=2, ylog=T)
     title("Manitoba’s Largest Lakes")
     ```
-7. (MB.CH1.7) **Solve**. 
+7. (MB.CH1.7) 
     ```{r, warning = F}
     dotchart(Manitoba.lakes$area, xlab = "area")
     text(Manitoba.lakes$area[-1],2:9,labels=row.names(Manitoba.lakes[-1,]), pos = 4)

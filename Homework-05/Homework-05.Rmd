@@ -1,6 +1,9 @@
 ---
-title: "Homework 5: Pareto and Kuznets on the Grand Tour"
-output: pdf_document
+title: 'Homework 5: Pareto and Kuznets on the Grand Tour'
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 We continue working with the World Top Incomes Database [https://wid.world], and the Pareto distribution, as in the lab.  We also continue to practice working with data frames, manipulating data from one format to another, and writing functions to automate repetitive tasks.

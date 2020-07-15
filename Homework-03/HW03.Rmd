@@ -17,9 +17,9 @@ library(tidyverse)
     gmp %>% ggplot + geom_point(aes(x = pop, y = pcgmp)) +
       labs(x = "Population", y = "Per-Capita Economic Output ($/person-year)",
           title = "US Metropolitan Areas, 2006") + 
-      geom_line(aes(x = pop, y = nlmfit), col = 'blue', size = 1.5) + 
-      geom_line(aes(x = pop, y = a0.1), col = 'red', size = 1.5) +
-      geom_line(aes(x = pop, y = a0.15), col = 'green', size = 1.5) +
+      geom_line(aes(x = pop, y = nlmfit), col = '#00BFC4') + 
+      geom_line(aes(x = pop, y = a0.1), col = '#F8766D') +
+      geom_line(aes(x = pop, y = a0.15), col = '#7CAE00') +
       scale_x_log10()
 ```
 
@@ -44,7 +44,8 @@ library(tidyverse)
     ```{r, warning=F}
     plm <- function(y0, a, N = gmp$pop, Y = gmp$pcgmp){
       pari = c(y0, a)
-      n <- nlm(mse, pari)
+      mse_tem <- function(vari) mse(vari,N,Y)
+      n <- nlm(mse_tem, pari)
       m = list(final_guess_y0 = n$estimate[1], 
                final_guess_a = n$estimate[2], 
                final_value_MSE = n$minimum)
@@ -79,11 +80,11 @@ library(tidyverse)
     ```
     
 7. 
-    ```{r}
-    plm.jackknife <- function(y0, a){
+    ```{r,warning = F}
+    plm.jackknife <- function(y0, a, data = gmp){
       jackknifed.gmp <- data.frame()
-      for (i in 1:nrow(gmp)){
-        m = data.frame(plm(y0, a, N = gmp[-i,"pop"], Y=gmp[-i,"pcgmp"]))
+      for (i in 1:nrow(data)){
+        m = data.frame(plm(y0, a, N = data[-i,"pop"], Y=data[-i,"pcgmp"]))
         jackknifed.gmp <- rbind(jackknifed.gmp, m)
       }
       y0 <- jackknifed.gmp$final_guess_y0
@@ -94,5 +95,14 @@ library(tidyverse)
       v <- c(y0, a)
       return(v)
     }
+    plm.jackknife(6600,0.1)
+    ```
+    
+8. The parameters didn't change a lot.
+    ```{r,warning = F}
+    gmp.2013 = read.table("gmp-2013.dat")
+    gmp.2013$pop <- round(gmp.2013$gmp / gmp.2013$pcgmp)
+    plm(6600,0.1,gmp.2013$pop,gmp.2013$pcgmp)
+    plm.jackknife(6600,0.1,gmp.2013)
     ```
     
